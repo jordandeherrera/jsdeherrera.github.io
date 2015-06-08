@@ -1,0 +1,200 @@
+---
+title: "Weightlifting Classe Predictions"
+author:  "Jordan S DeHerrera"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+---
+
+# Overview
+
+For my analysis, I followed this basic approach:
+
+1.  Clean the training set of data and separate into a training and test set.
+
+2.  Create two algorithms based off of training set of data.
++  Use preprocessing
++  Use recursive partitioning and random forest as model types
+
+3.  Test each model against the cleaned, testing set of data to determine the best model by evaluating each model's out of sample error through a confusion matrix.
+
+4.  Select the best model based off of the confusion matrix results for each model.
+
+## Step 1:  Cleaning the data and separating into training and test sets
+
+```{r, eval=FALSE}
+# Add relevant libraries
+library(rmarkdown)
+library(caret)
+library(ggplot2)
+
+#import data set
+df <- read.csv("pml-training.csv")
+
+# Create data frame for numeric test
+numerictest <- data.frame(row = as.numeric(), test = as.logical())
+
+# Test each column for numeric
+for(i in 1:length(names(df)))
+{
+  newline <- data.frame(row = i, test = is.numeric(df[,i]))
+  numerictest <- rbind(numerictest,newline)
+}
+
+# Select only columns that are numeric
+numerictest[numerictest$test==TRUE,1]
+
+# Create new clean data frame from which only numeric columns exist
+cleandf <- df[,numerictest[numerictest$test==TRUE,1]]
+
+# Filter "cleaned" data frame so that only columns without NAs are included for predictive purposes
+cleandf <- cleandf[,colSums(is.na(cleandf)) == 0]
+
+# Add classe back in
+cleandf <- cbind(cleandf,df$classe)
+
+# Rename column name to "classe"
+colnames(cleandf)[57] <- "classe"
+
+#Create training and testing sets
+inTrain <- createDataPartition(y=cleandf$classe, p=0.7, list=FALSE)
+Training <- cleandf[inTrain,]
+Testing <- cleandf[-inTrain,]
+```
+
+## Step 2:  Creating two algorithms
+
+```{r, eval=FALSE}
+#Create recursive partitioning model
+modFitRPART <- train(classe ~ ., method="rpart", data=Training, preProc = c("center","scale"))
+
+#Create random forest model
+modFitRF <- train(classe ~ ., method="rf", data=Training, preProc = c("center","scale"))
+```
+
+## Step 3:  Testing each algorithm
+
+```{r, eval=FALSE}
+#Create confusion matrix to evaluate model
+cmRPART <- confusionMatrix(Testing$classe, predict(modFitRPART,Testing))
+
+#Create confusion matrix to evaluate model
+cmRF <- confusionMatrix(Testing$classe, predict(modFitRF,Testing))
+```
+
+## Step 4:  Testing results and choosing the best algorithm
+
+### Recursive Partitioning
+
+Confusion Matrix Results:
+
+```{r, echo=FALSE}
+# Add relevant libraries
+library(rmarkdown)
+library(caret)
+library(ggplot2)
+library(randomForest)
+
+#import data set
+df <- read.csv("pml-training.csv")
+
+# Create data frame for numeric test
+numerictest <- data.frame(row = as.numeric(), test = as.logical())
+
+# Test each column for numeric
+for(i in 1:length(names(df)))
+{
+  newline <- data.frame(row = i, test = is.numeric(df[,i]))
+  numerictest <- rbind(numerictest,newline)
+}
+
+# Select only columns that are numeric
+numerictest[numerictest$test==TRUE,1]
+
+# Create new clean data frame from which only numeric columns exist
+cleandf <- df[,numerictest[numerictest$test==TRUE,1]]
+
+# Filter "cleaned" data frame so that only columns without NAs are included for predictive purposes
+cleandf <- cleandf[,colSums(is.na(cleandf)) == 0]
+
+# Add classe back in
+cleandf <- cbind(cleandf,df$classe)
+
+# Rename column name to "classe"
+colnames(cleandf)[57] <- "classe"
+
+#Create training and testing sets
+inTrain <- createDataPartition(y=cleandf$classe, p=0.7, list=FALSE)
+Training <- cleandf[inTrain,]
+Testing <- cleandf[-inTrain,]
+
+#Create recursive partitioning model
+modFitRPART <- train(classe ~ ., method="rpart", data=Training, preProc = c("center","scale"))
+
+#Create confusion matrix to evaluate model
+cmRPART <- confusionMatrix(Testing$classe, predict(modFitRPART,Testing))
+
+cmRPART
+```
+
+### Random Forest
+
+Confusion Matrix Results:
+
+```{r, echo=FALSE}
+# Add relevant libraries
+library(rmarkdown)
+library(caret)
+library(ggplot2)
+library(randomForest)
+
+#import data set
+df <- read.csv("pml-training.csv")
+
+# Create data frame for numeric test
+numerictest <- data.frame(row = as.numeric(), test = as.logical())
+
+# Test each column for numeric
+for(i in 1:length(names(df)))
+{
+  newline <- data.frame(row = i, test = is.numeric(df[,i]))
+  numerictest <- rbind(numerictest,newline)
+}
+
+# Select only columns that are numeric
+numerictest[numerictest$test==TRUE,1]
+
+# Create new clean data frame from which only numeric columns exist
+cleandf <- df[,numerictest[numerictest$test==TRUE,1]]
+
+# Filter "cleaned" data frame so that only columns without NAs are included for predictive purposes
+cleandf <- cleandf[,colSums(is.na(cleandf)) == 0]
+
+# Add classe back in
+cleandf <- cbind(cleandf,df$classe)
+
+# Rename column name to "classe"
+colnames(cleandf)[57] <- "classe"
+
+#Create training and testing sets
+inTrain <- createDataPartition(y=cleandf$classe, p=0.7, list=FALSE)
+Training <- cleandf[inTrain,]
+Testing <- cleandf[-inTrain,]
+
+#Create x and y variables
+x <- Training[,c(2:56)]
+y <- Training[,57]
+
+#Create random forest model
+modFitRF <- randomForest(x,y)
+
+#Create confusion matrix to evaluate model
+cmRF <- confusionMatrix(Testing$classe, predict(modFitRF,Testing))
+
+cmRF
+```
+
+# Overall evaluation:
+
+The random forest model produced results with about 99% accuracy while the recursive partitioning model produced results with 66% accuracy.  I therefore selected the algorithm produced by the random forest model and would expect the out of sample error to be about 0.2% as indicated in the confusion matrix during cross validation. 

@@ -43,9 +43,11 @@ modFitRPART <- train(classe ~ ., method="rpart", data=Training, preProc = c("cen
 #Create confusion matrix to evaluate model
 cmRPART <- confusionMatrix(Testing$classe, predict(modFitRPART,Testing))
 
-#Add x and y variables for random forest analysis
-x <- Training[,c(2:56)]
-y <- Training[,57]
+#Create gbm model
+modFitGBM <- train(classe ~ ., method="gbm", data=Training, preProc = c("center","scale"))
+
+#Create confusion matrix to evaluate model
+cmGBM <- confusionMatrix(Testing$classe, predict(modFitGBM,Testing))
 
 #Create random forest model
 modFitRF <- randomForest(x,y)
