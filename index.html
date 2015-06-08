@@ -214,39 +214,39 @@ cmRF &lt;-<span class="st"> </span><span class="kw">confusionMatrix</span>(Testi
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 1672    2    0    0    0
+##          A 1674    0    0    0    0
 ##          B    1 1138    0    0    0
-##          C    0    1 1025    0    0
-##          D    0    0    1  963    0
-##          E    0    0    0    0 1082
+##          C    0    2 1024    0    0
+##          D    0    0    2  962    0
+##          E    0    0    0    1 1081
 ## 
 ## Overall Statistics
-##                                          
-##                Accuracy : 0.9992         
-##                  95% CI : (0.998, 0.9997)
-##     No Information Rate : 0.2843         
-##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
-##                                          
-##                   Kappa : 0.9989         
-##  Mcnemar's Test P-Value : NA             
+##                                           
+##                Accuracy : 0.999           
+##                  95% CI : (0.9978, 0.9996)
+##     No Information Rate : 0.2846          
+##     P-Value [Acc &gt; NIR] : &lt; 2.2e-16       
+##                                           
+##                   Kappa : 0.9987          
+##  Mcnemar's Test P-Value : NA              
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity            0.9994   0.9974   0.9990   1.0000   1.0000
-## Specificity            0.9995   0.9998   0.9998   0.9998   1.0000
-## Pos Pred Value         0.9988   0.9991   0.9990   0.9990   1.0000
-## Neg Pred Value         0.9998   0.9994   0.9998   1.0000   1.0000
-## Prevalence             0.2843   0.1939   0.1743   0.1636   0.1839
-## Detection Rate         0.2841   0.1934   0.1742   0.1636   0.1839
+## Sensitivity            0.9994   0.9982   0.9981   0.9990   1.0000
+## Specificity            1.0000   0.9998   0.9996   0.9996   0.9998
+## Pos Pred Value         1.0000   0.9991   0.9981   0.9979   0.9991
+## Neg Pred Value         0.9998   0.9996   0.9996   0.9998   1.0000
+## Prevalence             0.2846   0.1937   0.1743   0.1636   0.1837
+## Detection Rate         0.2845   0.1934   0.1740   0.1635   0.1837
 ## Detection Prevalence   0.2845   0.1935   0.1743   0.1638   0.1839
-## Balanced Accuracy      0.9995   0.9986   0.9994   0.9999   1.0000</code></pre>
+## Balanced Accuracy      0.9997   0.9990   0.9988   0.9993   0.9999</code></pre>
 </div>
 </div>
 </div>
 <div id="overall-evaluation" class="section level1">
 <h1>Overall evaluation:</h1>
-<p>The random forest model produced results with about 99% accuracy while the recursive partitioning model produced results with 66% accuracy. I therefore selected the algorithm produced by the random forest model and would expect the out of sample error to be about 0.2% as indicated in the confusion matrix during cross validation.</p>
+<p>The random forest model produced results with about 99% accuracy while the recursive partitioning model produced results with 66% accuracy. I therefore selected the algorithm produced by the random forest model and would expect the out of sample error to be less than 1% as indicated in the confusion matrix during cross validation.</p>
 </div>
 
 

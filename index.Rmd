@@ -197,4 +197,4 @@ cmRF
 
 # Overall evaluation:
 
-The random forest model produced results with about 99% accuracy while the recursive partitioning model produced results with 66% accuracy.  I therefore selected the algorithm produced by the random forest model and would expect the out of sample error to be about 0.2% as indicated in the confusion matrix during cross validation. 
+The random forest model produced results with about 99% accuracy while the recursive partitioning model produced results with 66% accuracy.  I therefore selected the algorithm produced by the random forest model and would expect the out of sample error to be less than 1% as indicated in the confusion matrix during cross validation. 
